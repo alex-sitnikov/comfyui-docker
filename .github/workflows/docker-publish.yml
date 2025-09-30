@@ -2,18 +2,18 @@ name: build-and-push-dockerhub
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
     paths:
-      - "Dockerfile"
-      - "requirements.txt"
-      - "install_custom_nodes.sh"
-      - "sync_hook.py"
-      - "entrypoint.sh"
-      - ".dockerignore"
-      - ".github/workflows/docker-publish.yml"
-  push:
+      - Dockerfile
+      - requirements.txt
+      - install_custom_nodes.sh
+      - entrypoint.sh
+      - sync_hook.py
+      - .dockerignore
+      - .github/workflows/docker-publish.yml
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
   workflow_dispatch: {}
 
 concurrency:
@@ -60,7 +60,7 @@ jobs:
             type=schedule,pattern={{date 'YYYYMMDD'}}
           labels: |
             org.opencontainers.image.title=ComfyUI GPU Runtime
-            org.opencontainers.image.description=ComfyUI nightly + CUDA 12.6 + Python 3.11 + Torch 2.7.1/cu126 + xFormers + fast B2 sync (s5cmd)
+            org.opencontainers.image.description=ComfyUI nightly + CUDA 12.6 + Python 3.11 + Torch 2.7.1/cu126 + xFormers + B2 sync hook
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.created=${{ github.run_id }}
