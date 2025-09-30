@@ -42,26 +42,23 @@ RUN python -m pip install --index-url https://download.pytorch.org/whl/cu126 \
 COPY requirements.txt /tmp/requirements.txt
 RUN python -m pip install --no-deps -r /tmp/requirements.txt
 
-# 7) xFormers wheel compatible with Torch 2.7.1 + cu126
-RUN python -m pip install --index-url https://download.pytorch.org/whl/xformers/ xformers
-
-# 8) Fast S3 sync tool (s5cmd) + awscli fallback for compatibility
+# 7) Fast S3 sync tool (s5cmd) + awscli fallback for compatibility
 RUN wget -q https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_Linux-64bit.tar.gz -O /tmp/s5cmd.tgz \
  && tar -xzf /tmp/s5cmd.tgz -C /tmp \
  && install -m 0755 /tmp/s5cmd /usr/local/bin/s5cmd \
  && rm -f /tmp/s5cmd.tgz
 RUN python -m pip install --no-deps awscli
 
-# 9) Git LFS and ComfyUI (nightly = main)
+# 8) Git LFS and ComfyUI (nightly = main)
 RUN git lfs install
 RUN mkdir -p /workspace && \
     git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git ${COMFYUI_PATH}
 
-# 10) Custom nodes
+# 9) Custom nodes
 COPY install_custom_nodes.sh /opt/install_custom_nodes.sh
 RUN bash /opt/install_custom_nodes.sh
 
-# 11) Models/cache/output dirs
+# 10) Models/cache/output dirs
 RUN mkdir -p \
     ${COMFY_MODELS}/checkpoints \
     ${COMFY_MODELS}/vae \
@@ -77,15 +74,15 @@ RUN mkdir -p \
     ${COMFY_HOME}/temp \
     ${COMFY_HOME}/custom_nodes
 
-# 12) Non-root user
+# 11) Non-root user
 RUN useradd -ms /bin/bash comfy && chown -R comfy:comfy /workspace /opt
 USER comfy
 
-# 13) Healthcheck (ComfyUI on 8188)
+# 12) Healthcheck (ComfyUI on 8188)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=10 \
   CMD curl -fsS http://127.0.0.1:8188 || exit 1
 
-# 14) Entrypoint + REST hook (port 8787)
+# 13) Entrypoint + REST hook (port 8787)
 EXPOSE 8188
 EXPOSE 8787
 COPY entrypoint.sh /opt/entrypoint.sh
