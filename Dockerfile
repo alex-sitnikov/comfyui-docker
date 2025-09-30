@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.7
+
 # CUDA 12.6 runtime + cuDNN on Ubuntu 22.04
 FROM nvidia/cuda:12.6.2-cudnn-runtime-ubuntu22.04
 
@@ -76,18 +78,18 @@ RUN mkdir -p \
     ${COMFY_HOME}/temp \
     ${COMFY_HOME}/custom_nodes
 
-# 11) Non-root user
+# 11) Non-root user and permissions
 RUN useradd -ms /bin/bash comfy && chown -R comfy:comfy /workspace /opt
-USER comfy
 
 # 12) Healthcheck (ComfyUI on 8188)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=10 \
   CMD curl -fsS http://127.0.0.1:8188 || exit 1
 
-# 13) Entrypoint + REST hook (port 8787)
-EXPOSE 8188
-EXPOSE 8787
-COPY entrypoint.sh /opt/entrypoint.sh
-COPY sync_hook.py /opt/sync_hook.py
-RUN chmod +x /opt/entrypoint.sh /opt/install_custom_nodes.sh
+# 13) Expose and entrypoint
+EXPOSE 8188 8787
+
+COPY --chmod=0755 entrypoint.sh /opt/entrypoint.sh
+COPY --chmod=0644 sync_hook.py  /opt/sync_hook.py
+USER comfy
+
 ENTRYPOINT ["/opt/entrypoint.sh"]
