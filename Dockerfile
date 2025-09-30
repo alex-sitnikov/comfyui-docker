@@ -11,27 +11,28 @@ ENV DEBIAN_FRONTEND=noninteractive \
     COMFY_HOME=/workspace/ComfyUI \
     COMFY_MODELS=/workspace/ComfyUI/models
 
-# 1) System packages (minimal set required by ComfyUI/custom nodes)
+# 1) System packages (add build-essential for C/C++ builds)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 \
     git wget curl ca-certificates \
     software-properties-common gnupg \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# 2) Python 3.11 + pip bootstrap
+# 2) Python 3.11 + headers + pip bootstrap
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.11 python3.11-venv python3.11-distutils && \
-    rm -rf /var/lib/apt/lists/*
+    python3.11 python3.11-venv python3.11-distutils python3.11-dev \
+    && rm -rf /var/lib/apt/lists/*
 RUN curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py && \
     python3.11 /tmp/get-pip.py && rm -f /tmp/get-pip.py
 
-# 3) Dedicated venv on Python 3.11
+# 3) venv on Python 3.11
 RUN python3.11 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:${PATH}"
 
-# 4) Build tooling
-RUN python -m pip install --upgrade pip wheel setuptools
+# 4) Build tooling (+ Cython to satisfy native builds like insightface)
+RUN python -m pip install --upgrade pip wheel setuptools cython==0.29.37
 
 # 5) PyTorch/cuDNN (cu126) from official index (exact versions you requested)
 RUN python -m pip install --index-url https://download.pytorch.org/whl/cu126 \
