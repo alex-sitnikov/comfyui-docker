@@ -15,7 +15,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 \
-    git wget curl ca-certificates \
+    git git-lfs wget curl ca-certificates \
     software-properties-common gnupg \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
@@ -50,7 +50,7 @@ RUN wget -q https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_L
 RUN python -m pip install --no-deps awscli
 
 # 8) Git LFS and ComfyUI (nightly = main)
-RUN git lfs install
+RUN git lfs install --system
 RUN mkdir -p /workspace && \
     git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git ${COMFYUI_PATH}
 
