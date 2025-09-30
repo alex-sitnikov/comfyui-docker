@@ -1,0 +1,15 @@
+.git
+.github
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+*.swp
+*.swo
+.env
+venv
+.venv
+node_modules
+dist
+build
+workspace
