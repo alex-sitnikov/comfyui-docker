@@ -49,8 +49,8 @@ retry_clone "${BASE_URL}/ltdrdata/ComfyUI-Impact-Pack.git" "ComfyUI-Impact-Pack"
 # Video Helper Suite
 retry_clone "${BASE_URL}/Kosinkadink/ComfyUI-VideoHelperSuite.git" "ComfyUI-VideoHelperSuite"
 
-# RIFE interpolation
-retry_clone "${BASE_URL}/KohakuBlueleaf/ComfyUI-RIFE.git" "ComfyUI-RIFE"
+# ComfyUI VFI (Frame Interpolation)
+retry_clone "${BASE_URL}/Fannovel16/ComfyUI-Frame-Interpolation.git" "ComfyUI-Frame-Interpolation"
 
 # Real-ESRGAN nodes
 retry_clone "${BASE_URL}/Acly/comfyui-inferlab-nodes.git" "comfyui-inferlab-nodes"
