@@ -55,6 +55,8 @@ RUN mkdir -p /workspace && \
     git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git ${COMFYUI_PATH}
 
 # 9) Custom nodes
+ARG GITHUB_TOKEN=""
+ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 COPY install_custom_nodes.sh /opt/install_custom_nodes.sh
 RUN bash /opt/install_custom_nodes.sh
 

@@ -90,6 +90,8 @@ jobs:
           push: ${{ steps.guard.outputs.have_secrets == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       - name: Summary
         shell: bash
