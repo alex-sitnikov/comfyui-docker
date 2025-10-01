@@ -49,7 +49,7 @@ RUN wget -q https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_L
  && tar -xzf /tmp/s5cmd.tgz -C /tmp \
  && install -m 0755 /tmp/s5cmd /usr/local/bin/s5cmd \
  && rm -f /tmp/s5cmd.tgz
-RUN python -m pip install --no-deps awscli
+RUN python -m pip install --upgrade awscli
 
 # 8) Git LFS and ComfyUI (nightly = main)
 RUN git lfs install --system
